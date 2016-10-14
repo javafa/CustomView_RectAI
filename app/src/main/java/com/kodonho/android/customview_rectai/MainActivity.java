@@ -65,16 +65,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLeft  : player_x = player_x - 1; break;  // 왼쪽으로 unit만큼 x좌표 감소
             case R.id.btnRight : player_x = player_x + 1; break;
             case R.id.btnStart:
+                // start 버튼을 클릭하면 익명 클래스로 thread를 무제한으로 생성한다
                 new Enemy(cv).start();
                 break;
         }
         cv.invalidate();
     }
 
+    // 적군 thread
     class Enemy extends Thread{
         int x = 0;
         int y = 0;
-        int size = unit;
+        int size = unit/2;
         CustomView cv;
 
         public Enemy(CustomView cv){
@@ -89,20 +91,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // TODO 플레이어가 있는곳으로 나의 좌표를 변경한다
                 distance_x = player_x*unit - x;
                 distance_y = player_y*unit - y;
-
+                // 플레이어와 나(적군)의 거리차가 + 이면 나의오른쪽에 플레이어가 있으므로 1씩증가
                 if(distance_x > 0)
                     x = x + 1;
                 else if(distance_x < 0)
                     x = x - 1;
-
+                // 플레이어와 나(적군)의 거리차가 - 이면 나의 아래쪽에 플레이어가 있으므로 1씩증가
                 if(distance_y > 0)
                     y = y + 1;
                 else if(distance_y < 0)
                     y = y - 1;
-
+                // 나(적군)의 좌표값을 변경한 후에 화면을 다시 그려준다
                 cv.postInvalidate();
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(10); // 화면을 그리는 속도를 제한한다
                 }catch(Exception e){e.printStackTrace();}
             }
         }
@@ -134,12 +136,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     , player_x*unit + unit
                     , player_y*unit + unit
                     , paint);
-
             //적군 그리기
             for(Enemy enemy :enemies){
                 paint.setColor(Color.BLUE);
                 canvas.drawCircle(
-                        enemy.x, enemy.y, enemy.size, paint);
+                        enemy.x+enemy.size, enemy.y+enemy.size, enemy.size, paint);
             }
         }
     }
