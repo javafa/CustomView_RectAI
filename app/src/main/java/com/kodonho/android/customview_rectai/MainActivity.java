@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         public Enemy(CustomView cv){
             this.cv = cv;
+            Random random = new Random();
+            x = random.nextInt(groundUnit);
+            y = random.nextInt(groundUnit);
             cv.add(this);
         }
         @Override
